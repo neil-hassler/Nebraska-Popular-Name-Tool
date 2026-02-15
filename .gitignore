@@ -10,3 +10,6 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+
+# SQLite database (rebuilt from CSV on first run)
+*.db

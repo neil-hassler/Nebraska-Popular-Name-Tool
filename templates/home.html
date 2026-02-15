@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Search — Nebraska Statute Popular Names{% endblock %}
+
+{% block content %}
+<div class="text-center mt-4 mb-4">
+  <h1 class="mb-2">Nebraska Statute Popular Names</h1>
+  <p class="text-muted">Search the popular-name index of the Nebraska Revised Statutes</p>
+</div>
+
+<div class="search-box mb-5">
+  <form action="/" method="get">
+    <div class="input-group input-group-lg">
+      <input type="text" class="form-control" name="q"
+             value="{{ query }}"
+             placeholder="Search by popular name or statute number&hellip;"
+             aria-label="Search statutes"
+             autofocus>
+      <button class="btn btn-primary" type="submit"
+              style="background-color: #1a3a5c; border-color: #1a3a5c;">
+        Search
+      </button>
+    </div>
+  </form>
+</div>
+
+{% if results is not none %}
+  {% if results %}
+    <p class="text-muted mb-3">{{ results|length }} result{{ 's' if results|length != 1 }} for
+       <strong>&ldquo;{{ query }}&rdquo;</strong></p>
+
+    {% for s in results %}
+    <div class="card result-card mb-3 p-3">
+      <h5 class="mb-1">
+        <a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.popular_name }}</a>
+      </h5>
+      <p class="mb-1">
+        <strong>Sections:</strong> {{ s.start_section }} &ndash; {{ s.end_section }}
+        &nbsp;|&nbsp;
+        <strong>Statute:</strong> &sect;&nbsp;{{ s.statute_number }}
+      </p>
+      <p class="text-muted small mb-0">{{ s.full_text }}</p>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-center text-muted mt-4">No results found for
+       <strong>&ldquo;{{ query }}&rdquo;</strong>. Try a different search term.</p>
+  {% endif %}
+{% else %}
+  <div class="text-center text-muted mt-3">
+    <p>Try searching for <a href="/?q=Uniform+Commercial+Code">Uniform Commercial Code</a>,
+       <a href="/?q=2-1072">2-1072</a>, or
+       <a href="/?q=Insurance">Insurance</a>.</p>
+    <p class="mt-2">Or <a href="/browse">browse all {{ total }} popular names</a> alphabetically.</p>
+  </div>
+{% endif %}
+{% endblock %}
