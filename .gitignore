@@ -1,8 +1,8 @@
 # Cloned XML repository (large, downloaded at runtime)
 LegalDocs/
 
-# Output files
-*.csv
+# Output files (kept in repo for easy access)
+# *.csv
 
 # Python
 __pycache__/
