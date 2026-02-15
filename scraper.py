@@ -53,6 +53,8 @@ CSV_COLUMNS = [
     "statute_number",
     "section_title",
     "popular_name",
+    "start_section",
+    "end_section",
     "full_text_of_naming_clause",
     "url",
 ]
@@ -183,6 +185,87 @@ def extract_popular_names(text: str):
             continue
         results.append((popular_name, full_clause))
     return results
+
+
+# ---------------------------------------------------------------------------
+# Section-range extraction
+# ---------------------------------------------------------------------------
+
+# Pattern for a Nebraska section number: e.g. "1-105", "2-10,117", "28-401"
+_SEC_NUM_PAT = r"(\d+[-]\d[\d,.]*)"
+
+
+def extract_section_range(clause: str, statute_number: str) -> tuple[str, str]:
+    """
+    Parse *clause* to find the beginning and ending section numbers.
+
+    Returns (start_section, end_section) where end_section may be:
+      - a section number  (standard sequential range)
+      - ""                (single-section reference or no reference)
+      - "Not sequential range -- further review required"
+    """
+    # 1. Standard "Sections X to Y" range
+    range_match = re.search(
+        rf"Sections?\s+{_SEC_NUM_PAT}\s+to\s+{_SEC_NUM_PAT}",
+        clause,
+        re.IGNORECASE,
+    )
+
+    if range_match:
+        start = range_match.group(1)
+        end = range_match.group(2)
+
+        # Check for non-sequential references (extra sections beyond
+        # the simple "X to Y", listed via commas or "and").
+        ref_match = re.search(
+            r"Sections?\s+(.*?)\s+(?:shall|may)\b",
+            clause,
+            re.IGNORECASE,
+        )
+        if ref_match:
+            all_sections = re.findall(_SEC_NUM_PAT, ref_match.group(1))
+            if len(all_sections) > 2:
+                return (all_sections[0], "Not sequential range -- further review required")
+
+        return (start, end)
+
+    # 2. "This section shall be known …" → single section
+    if re.search(r"\bThis\s+section\b", clause, re.IGNORECASE):
+        return (statute_number, "")
+
+    # 3. "Sections X and Y shall …" (two sections, no "to")
+    and_match = re.search(
+        rf"Sections?\s+{_SEC_NUM_PAT}\s+and\s+{_SEC_NUM_PAT}\s+(?:shall|may)\b",
+        clause,
+        re.IGNORECASE,
+    )
+    if and_match:
+        return (and_match.group(1), "Not sequential range -- further review required")
+
+    # 4. Truncated range — clause starts with digits because the
+    #    statute number contains a period (e.g. "2-945.01") and the
+    #    sentence-boundary regex split on that period.
+    #    E.g. "01 to 2-970 shall be known …"
+    trunc_range = re.match(
+        rf"[\d,.]+\s+to\s+{_SEC_NUM_PAT}\s+(?:shall|may)\b",
+        clause,
+        re.IGNORECASE,
+    )
+    if trunc_range:
+        return (statute_number, trunc_range.group(1))
+
+    # 5. Truncated single-section reference
+    #    E.g. "01 shall be known …"
+    trunc_single = re.match(
+        r"[\d,.]+\s+(?:shall|may)\b",
+        clause,
+        re.IGNORECASE,
+    )
+    if trunc_single:
+        return (statute_number, "")
+
+    # 6. No section reference found
+    return ("", "")
 
 
 # ===================================================================
@@ -361,11 +444,16 @@ class WebScraper:
 
                 matches = extract_popular_names(statute["text"])
                 for popular_name, clause in matches:
+                    start_sec, end_sec = extract_section_range(
+                        clause, statute["statute_number"]
+                    )
                     results.append(
                         {
                             "statute_number": statute["statute_number"],
                             "section_title": statute["section_title"],
                             "popular_name": popular_name,
+                            "start_section": start_sec,
+                            "end_section": end_sec,
                             "full_text_of_naming_clause": clause,
                             "url": statute["url"],
                         }
@@ -504,11 +592,16 @@ class XMLScraper:
 
             matches = extract_popular_names(statute["text"])
             for popular_name, clause in matches:
+                start_sec, end_sec = extract_section_range(
+                    clause, statute["statute_number"]
+                )
                 results.append(
                     {
                         "statute_number": statute["statute_number"],
                         "section_title": statute["section_title"],
                         "popular_name": popular_name,
+                        "start_section": start_sec,
+                        "end_section": end_sec,
                         "full_text_of_naming_clause": clause,
                         "url": statute["url"],
                     }
