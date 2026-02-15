@@ -1,0 +1,12 @@
+# Cloned XML repository (large, downloaded at runtime)
+LegalDocs/
+
+# Output files
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
