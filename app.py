@@ -96,7 +96,15 @@ def home():
 
     db = get_db()
     total = db.execute("SELECT COUNT(*) FROM statutes").fetchone()[0]
-    return render_template("home.html", query=query, results=results, total=total)
+
+    # All popular names for the quick-jump dropdown
+    all_names = db.execute(
+        "SELECT popular_name, url FROM statutes ORDER BY popular_name"
+    ).fetchall()
+
+    return render_template(
+        "home.html", query=query, results=results, total=total, all_names=all_names
+    )
 
 
 @app.route("/browse")
@@ -110,7 +118,26 @@ def browse():
     # Group by first letter for alphabetical navigation
     letters = sorted(set(s["popular_name"][0].upper() for s in statutes if s["popular_name"]))
 
-    return render_template("browse.html", statutes=statutes, letters=letters)
+    # Group by chapter number for chapter view
+    by_chapter = db.execute(
+        "SELECT * FROM statutes ORDER BY statute_number"
+    ).fetchall()
+
+    chapters = {}
+    for s in by_chapter:
+        chap = s["statute_number"].split("-")[0] if "-" in s["statute_number"] else "Other"
+        chapters.setdefault(chap, []).append(s)
+
+    # Sort chapter keys numerically
+    sorted_chapters = sorted(chapters.keys(), key=lambda c: (int(c) if c.isdigit() else 9999))
+
+    return render_template(
+        "browse.html",
+        statutes=statutes,
+        letters=letters,
+        chapters=chapters,
+        sorted_chapters=sorted_chapters,
+    )
 
 
 @app.route("/about")
