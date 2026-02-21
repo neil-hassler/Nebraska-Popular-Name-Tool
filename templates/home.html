@@ -27,7 +27,7 @@
   <div class="quick-jump mt-3">
     <select class="form-select" id="quickJump"
             aria-label="Jump to a statute by popular name"
-            onchange="if(this.value) window.open(this.value, '_blank')">
+            onchange="if(this.value) window.location.href=this.value">
       <option value="" selected>Jump to a statute&hellip; ({{ all_names|length }} titles)</option>
       {% for name in all_names %}
       <option value="{{ name.url }}">{{ name.popular_name }}</option>
