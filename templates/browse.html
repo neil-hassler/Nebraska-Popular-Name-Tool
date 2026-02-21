@@ -3,8 +3,13 @@
 {% block title %}Browse — Nebraska Statute Popular Names{% endblock %}
 
 {% block content %}
-<h1 class="mb-3">Browse All Popular Names</h1>
-<p class="text-muted">{{ statutes|length }} statutes with popular names.</p>
+<h1 class="mb-3" style="color: #5a1a1a; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.5px;">Popular Name Tool</h1>
+
+<p class="mb-4">
+  The Popular Name Tool enables you to search or browse the Nebraska Revised Statutes
+  Table of Acts Cited by Popular Name. {{ statutes|length }} statutes with popular names
+  are currently indexed. You may also <a href="/">search by keyword</a>.
+</p>
 
 <!-- View toggle -->
 <div class="view-toggle btn-group mb-4" role="group" aria-label="View mode">
@@ -16,58 +21,66 @@
 
 <!-- ===== Alphabetical view ===== -->
 <div id="viewAlpha">
-  <div class="letter-nav mb-4">
-    {% for letter in letters %}
-      <a href="#letter-{{ letter }}">{{ letter }}</a>
-    {% endfor %}
-  </div>
+  <div class="browse-layout">
+    <div class="browse-main">
+      {% set ns = namespace(current_letter='') %}
+      {% for s in statutes %}
+        {% set first = s.popular_name[0]|upper %}
+        {% if first != ns.current_letter %}
+          {% set ns.current_letter = first %}
+          <h3 id="letter-{{ first }}" class="mt-4 mb-2 border-bottom pb-1"
+              style="color: #5a1a1a;">{{ first }}</h3>
+        {% endif %}
 
-  {% set ns = namespace(current_letter='') %}
-  {% for s in statutes %}
-    {% set first = s.popular_name[0]|upper %}
-    {% if first != ns.current_letter %}
-      {% set ns.current_letter = first %}
-      <h3 id="letter-{{ first }}" class="mt-4 mb-2 border-bottom pb-1">{{ first }}</h3>
-    {% endif %}
-
-    <div class="row py-2 border-bottom align-items-baseline">
-      <div class="col-md-7">
-        <a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.popular_name }}</a>
-      </div>
-      <div class="col-md-3 text-muted small">
-        &sect;&nbsp;{{ s.start_section }} &ndash; {{ s.end_section }}
-      </div>
-      <div class="col-md-2 text-muted small">
-        {{ s.statute_number }}
-      </div>
+        <div class="statute-entry">
+          <div class="entry-name">
+            <a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.popular_name }}</a>
+          </div>
+          <div class="entry-details">
+            &sect;&nbsp;{{ s.start_section }}&ndash;{{ s.end_section }}
+            ({{ s.statute_number }})
+          </div>
+        </div>
+      {% endfor %}
     </div>
-  {% endfor %}
+
+    <div class="jump-to-sidebar">
+      <div class="jump-label">Jump to:</div>
+      {% for letter in letters %}
+        <a href="#letter-{{ letter }}">{{ letter }}</a>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 <!-- ===== Chapter view ===== -->
 <div id="viewChapter" style="display: none;">
-  <div class="letter-nav mb-4">
-    {% for chap in sorted_chapters %}
-      <a href="#chapter-{{ chap }}">{{ chap }}</a>
-    {% endfor %}
-  </div>
-
-  {% for chap in sorted_chapters %}
-    <h3 id="chapter-{{ chap }}" class="mt-4 mb-2 border-bottom pb-1">Chapter {{ chap }}</h3>
-    {% for s in chapters[chap] %}
-    <div class="row py-2 border-bottom align-items-baseline">
-      <div class="col-md-7">
-        <a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.popular_name }}</a>
-      </div>
-      <div class="col-md-3 text-muted small">
-        &sect;&nbsp;{{ s.start_section }} &ndash; {{ s.end_section }}
-      </div>
-      <div class="col-md-2 text-muted small">
-        {{ s.statute_number }}
-      </div>
+  <div class="browse-layout">
+    <div class="browse-main">
+      {% for chap in sorted_chapters %}
+        <h3 id="chapter-{{ chap }}" class="mt-4 mb-2 border-bottom pb-1"
+            style="color: #5a1a1a;">Chapter {{ chap }}</h3>
+        {% for s in chapters[chap] %}
+        <div class="statute-entry">
+          <div class="entry-name">
+            <a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.popular_name }}</a>
+          </div>
+          <div class="entry-details">
+            &sect;&nbsp;{{ s.start_section }}&ndash;{{ s.end_section }}
+            ({{ s.statute_number }})
+          </div>
+        </div>
+        {% endfor %}
+      {% endfor %}
     </div>
-    {% endfor %}
-  {% endfor %}
+
+    <div class="jump-to-sidebar">
+      <div class="jump-label">Jump to:</div>
+      {% for chap in sorted_chapters %}
+        <a href="#chapter-{{ chap }}">{{ chap }}</a>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 <p class="text-center mt-4"><a href="#">Back to top</a></p>

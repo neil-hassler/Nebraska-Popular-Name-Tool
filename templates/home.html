@@ -42,16 +42,14 @@
        <strong>&ldquo;{{ query }}&rdquo;</strong></p>
 
     {% for s in results %}
-    <div class="card result-card mb-3 p-3">
-      <h5 class="mb-1">
+    <div class="statute-entry">
+      <div class="entry-name">
         <a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.popular_name }}</a>
-      </h5>
-      <p class="mb-1">
-        <strong>Sections:</strong> {{ s.start_section }} &ndash; {{ s.end_section }}
-        &nbsp;|&nbsp;
-        <strong>Statute:</strong> &sect;&nbsp;{{ s.statute_number }}
-      </p>
-      <p class="text-muted small mb-0">{{ s.full_text }}</p>
+      </div>
+      <div class="entry-details">
+        &sect;&nbsp;{{ s.start_section }}&ndash;{{ s.end_section }}
+        ({{ s.statute_number }})
+      </div>
     </div>
     {% endfor %}
   {% else %}

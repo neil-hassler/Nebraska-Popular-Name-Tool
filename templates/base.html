@@ -99,6 +99,65 @@
       border-color: #1a3a5c;
       color: #fff;
     }
+
+    /* Browse page layout with Jump-to sidebar */
+    .browse-layout {
+      display: flex;
+      gap: 1rem;
+    }
+    .browse-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .jump-to-sidebar {
+      position: sticky;
+      top: 1rem;
+      align-self: flex-start;
+      text-align: center;
+      padding: 0.5rem 0.25rem;
+      line-height: 1.1;
+    }
+    .jump-to-sidebar .jump-label {
+      font-weight: bold;
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 0.25rem;
+    }
+    .jump-to-sidebar a {
+      display: block;
+      padding: 1px 0.4rem;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #5a1a1a;
+      text-decoration: none;
+    }
+    .jump-to-sidebar a:hover {
+      text-decoration: underline;
+      color: #1a3a5c;
+    }
+
+    /* Simple text-based statute entries */
+    .statute-entry {
+      margin-bottom: 0.6rem;
+    }
+    .statute-entry .entry-name {
+      font-weight: bold;
+      color: #2c2c2c;
+    }
+    .statute-entry .entry-name a {
+      color: #2c2c2c;
+      text-decoration: none;
+    }
+    .statute-entry .entry-name a:hover {
+      text-decoration: underline;
+      color: #1a3a5c;
+    }
+    .statute-entry .entry-details {
+      padding-left: 2rem;
+      color: #555;
+      font-size: 0.92rem;
+    }
+
     footer {
       border-top: 1px solid #ddd;
       color: #777;
