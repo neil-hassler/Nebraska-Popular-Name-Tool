@@ -10,142 +10,255 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YcnS/1p8EfIMR+EVB2sFNyp9a3z0Bw7IARz"
         crossorigin="anonymous">
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
-      background-color: #fafaf8;
-      color: #2c2c2c;
+      margin: 0;
+      color: #fff;
       font-family: Georgia, "Times New Roman", serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background: #001c47;
     }
-    h1, h2, h3 {
-      font-family: Georgia, "Times New Roman", serif;
-    }
-    a { color: #002868; }
-    .splash {
+
+    /* Full-page hero background */
+    .hero-bg {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1.25rem 2rem;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 28, 71, 0.62) 0%,
+          rgba(0, 28, 71, 0.78) 50%,
+          rgba(0, 28, 71, 0.92) 100%
+        ),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Nebraska_State_Capitol_from_W_1.JPG/1200px-Nebraska_State_Capitol_from_W_1.JPG');
+      background-size: cover;
+      background-position: center 20%;
+      background-repeat: no-repeat;
     }
-    .splash h1 {
-      font-size: 2.4rem;
+
+    /* Gold decorative rule */
+    .gold-rule {
+      width: 60px;
+      height: 2px;
+      background: #C5972C;
+      border: none;
+      margin: 0 auto;
+    }
+
+    /* Title block */
+    .site-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #C5972C;
+      margin-top: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+    .site-title {
+      font-size: 2.6rem;
       font-weight: 700;
-      color: #002868;
-      margin-bottom: 0.5rem;
+      line-height: 1.15;
+      margin-bottom: 0.35rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.35);
     }
-    .splash .subtitle {
-      font-size: 1.1rem;
-      color: #555;
-      max-width: 500px;
-      margin-bottom: 2rem;
+    .site-subtitle {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.7);
+      max-width: 440px;
+      margin: 0.75rem auto 0;
+      line-height: 1.5;
     }
+    .stat-count {
+      font-variant-numeric: tabular-nums;
+      color: #C5972C;
+      font-weight: 600;
+    }
+
+    /* Browse CTA */
     .btn-browse {
+      display: inline-block;
+      margin-top: 2rem;
       background-color: #C5972C;
       color: #fff;
       border: none;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      padding: 0.75rem 2.5rem;
-      border-radius: 4px;
+      padding: 0.8rem 2.8rem;
+      border-radius: 3px;
       text-decoration: none;
-      transition: background-color 0.15s;
+      letter-spacing: 0.02em;
+      transition: background-color 0.15s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
     .btn-browse:hover {
-      background-color: #a87d24;
+      background-color: #d4a43a;
       color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
+
+    /* Search section */
     .search-section {
-      margin-top: 2.5rem;
+      margin-top: 2rem;
       width: 100%;
-      max-width: 500px;
+      max-width: 460px;
     }
-    .search-section .divider {
+    .search-divider {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      color: #999;
-      font-size: 0.85rem;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
     }
-    .search-section .divider::before,
-    .search-section .divider::after {
+    .search-divider::before,
+    .search-divider::after {
       content: '';
       flex: 1;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid rgba(255,255,255,0.15);
     }
     .search-section .input-group {
-      border: 2px solid #002868;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 4px;
       overflow: hidden;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
     }
     .search-section .form-control {
+      background: transparent;
       border: none;
+      color: #fff;
       font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.95rem;
+    }
+    .search-section .form-control::placeholder {
+      color: rgba(255,255,255,0.45);
     }
     .search-section .form-control:focus {
       box-shadow: none;
+      background: rgba(255,255,255,0.05);
     }
     .search-section .btn-search {
-      background-color: #002868;
+      background: transparent;
       color: #C5972C;
       border: none;
+      border-left: 1px solid rgba(255,255,255,0.15);
       font-weight: 600;
       font-family: Georgia, "Times New Roman", serif;
+      padding: 0.5rem 1.2rem;
     }
     .search-section .btn-search:hover {
-      background-color: #001a4a;
+      background: rgba(255,255,255,0.08);
       color: #d4a843;
     }
+
+    /* Search results card */
     .search-results {
       text-align: left;
-      margin-top: 1rem;
+      margin-top: 0.75rem;
     }
+    .search-results:not(:empty) {
+      background: rgba(255,255,255,0.95);
+      color: #2c2c2c;
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      max-height: 320px;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .search-results a { color: #002868; }
+    .search-results .text-muted { color: #666 !important; }
     .statute-entry {
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
     }
     .statute-entry .entry-name {
       font-weight: bold;
-      color: #2c2c2c;
     }
     .statute-entry .entry-name a {
-      color: #2c2c2c;
+      color: #002868;
       text-decoration: none;
     }
     .statute-entry .entry-name a:hover {
       text-decoration: underline;
-      color: #002868;
     }
     .statute-entry .entry-details {
-      padding-left: 2rem;
+      padding-left: 1.5rem;
       color: #555;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
+
+    /* Footer */
     footer {
-      border-top: 1px solid #ddd;
-      color: #777;
-      font-size: 0.85rem;
+      background: #001534;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
       text-align: center;
-      padding: 1rem;
+      padding: 0.75rem 1rem;
     }
-    footer a { color: #002868; }
+    footer a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #C5972C;
+    }
+
+    /* Explainer blurb */
+    .explainer {
+      max-width: 500px;
+      margin: 1.25rem auto 0;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+      .site-title { font-size: 1.9rem; }
+      .btn-browse { padding: 0.7rem 2rem; font-size: 1rem; }
+    }
   </style>
 </head>
 <body>
 
-<div class="splash">
-  <h1>Nebraska Popular Name Tool</h1>
-  <p class="subtitle">Find Nebraska statutes by their commonly known names.
-    944 acts indexed from the Nebraska Revised Statutes.</p>
+<div class="hero-bg">
+  <hr class="gold-rule">
+  <div class="site-label">Nebraska Revised Statutes</div>
+  <h1 class="site-title">Popular Name Tool</h1>
+  <hr class="gold-rule">
+
+  <p class="site-subtitle">
+    Find Nebraska laws by their commonly known names.
+    <span class="stat-count">944</span> acts indexed and linked to official sources.
+  </p>
+
+  <p class="explainer">
+    Many Nebraska statutes have a &ldquo;popular name&rdquo;&mdash;a short,
+    everyday title like the <em>Consumer Protection Act</em> or the
+    <em>Uniform Commercial Code</em>. This tool collects all
+    <span class="stat-count">944</span> of those names into a single
+    searchable index so you can find the law you&rsquo;re looking for
+    without knowing its chapter and section number. Each entry links
+    directly to the full text on the Nebraska Legislature&rsquo;s
+    official website.
+  </p>
 
   <a href="browse.html" class="btn-browse">Browse the Index</a>
 
   <div class="search-section">
-    <div class="divider">or search by keyword</div>
+    <div class="search-divider">or search by keyword</div>
     <div class="input-group">
       <input type="text" class="form-control" id="searchInput"
              placeholder="e.g. Uniform Commercial Code"
@@ -176,8 +289,8 @@ function runSearch() {
 
   if (results.length) {
     var countP = document.createElement('p');
-    countP.className = 'text-muted mt-2 mb-2';
-    countP.style.fontSize = '0.9rem';
+    countP.className = 'text-muted mt-1 mb-2';
+    countP.style.fontSize = '0.85rem';
     countP.innerHTML = results.length + ' result' + (results.length > 1 ? 's' : '') +
       ' for <strong>&ldquo;' + q.replace(/</g,'&lt;') + '&rdquo;</strong>';
     area.appendChild(countP);
@@ -185,7 +298,7 @@ function runSearch() {
     results.forEach(function(s) {
       var div = document.createElement('div');
       div.className = 'statute-entry';
-      div.innerHTML = '<div class="entry-name"><a href="' + s.url + '">' +
+      div.innerHTML = '<div class="entry-name"><a href="' + s.url + '" target="_blank" rel="noopener">' +
         s.popular_name.replace(/</g,'&lt;') + '</a></div>' +
         '<div class="entry-details">&sect;&nbsp;' + s.start_section +
         '&ndash;' + s.end_section + ' (' + s.statute_number + ')</div>';
@@ -193,8 +306,8 @@ function runSearch() {
     });
   } else {
     var noP = document.createElement('p');
-    noP.className = 'text-muted mt-2';
-    noP.style.fontSize = '0.9rem';
+    noP.className = 'text-muted mt-1';
+    noP.style.fontSize = '0.85rem';
     noP.innerHTML = 'No results for <strong>&ldquo;' +
       q.replace(/</g,'&lt;') + '&rdquo;</strong>. Try browsing <a href="browse.html">the full index</a>.';
     area.appendChild(noP);
