@@ -15,166 +15,86 @@
       color: #2c2c2c;
       font-family: Georgia, "Times New Roman", serif;
     }
-    .navbar {
-      background-color: #002868;
-    }
-    .navbar-brand, .nav-link {
-      color: #e8e4dc !important;
-    }
-    .nav-link:hover {
-      color: #fff !important;
-    }
-    .nav-link.active {
-      font-weight: bold;
-      color: #fff !important;
-    }
-    h1, h2, h3 {
+    h1, h2, h3, h5 {
       font-family: Georgia, "Times New Roman", serif;
     }
-    .search-box {
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .hero {
-      background: linear-gradient(rgba(26, 58, 92, 0.72), rgba(26, 58, 92, 0.85)),
-                  url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Nebraska_State_Capitol_from_W_1.JPG/1200px-Nebraska_State_Capitol_from_W_1.JPG');
+    a { color: #002868; }
+    .page-banner {
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 28, 71, 0.70),
+          rgba(0, 28, 71, 0.88)
+        ),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Nebraska_State_Capitol_from_W_1.JPG/1200px-Nebraska_State_Capitol_from_W_1.JPG');
       background-size: cover;
-      background-position: center top;
+      background-position: center 20%;
       color: #fff;
-      padding: 3rem 1rem 2.5rem;
+      padding: 1.5rem 1rem 1.25rem;
+      text-align: center;
     }
-    .hero h1 {
-      font-size: 2.2rem;
+    .page-banner .banner-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #C5972C;
+      margin-bottom: 0.15rem;
+    }
+    .page-banner h1 {
+      font-size: 1.6rem;
       font-weight: 700;
+      margin: 0;
       text-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
-    .hero p {
-      color: #ddd;
+    .page-banner .banner-rule {
+      width: 40px;
+      height: 2px;
+      background: #C5972C;
+      border: none;
+      margin: 0.5rem auto 0;
     }
-    .quick-jump {
-      max-width: 480px;
-      margin: 0 auto;
-    }
-    .quick-jump select {
-      font-family: Georgia, "Times New Roman", serif;
-      border: 2px solid #002868;
-      cursor: pointer;
-    }
-    .popular-tags a {
-      display: inline-block;
-      padding: 0.3rem 0.75rem;
-      margin: 0.25rem;
-      border: 1px solid #002868;
-      border-radius: 999px;
+    .page-banner .banner-nav {
+      margin-top: 0.6rem;
       font-size: 0.85rem;
+    }
+    .page-banner .banner-nav a {
+      color: rgba(255,255,255,0.6);
       text-decoration: none;
-      color: #002868;
-      transition: all 0.15s;
+      margin: 0 0.5rem;
     }
-    .popular-tags a:hover {
-      background-color: #002868;
-      color: #fff;
-    }
-    .view-toggle .btn {
-      font-size: 0.85rem;
-    }
-    .view-toggle .btn.active {
-      background-color: #002868;
-      border-color: #002868;
-      color: #fff;
-    }
-    .browse-layout {
-      display: flex;
-      gap: 1rem;
-    }
-    .browse-main {
-      flex: 1;
-      min-width: 0;
-    }
-    .jump-to-sidebar {
-      position: sticky;
-      top: 1rem;
-      align-self: flex-start;
-      text-align: center;
-      padding: 0.5rem 0.25rem;
-      line-height: 1.1;
-    }
-    .jump-to-sidebar .jump-label {
-      font-weight: bold;
-      font-size: 0.8rem;
-      color: #555;
-      margin-bottom: 0.25rem;
-    }
-    .jump-to-sidebar a {
-      display: block;
-      padding: 1px 0.4rem;
-      font-size: 0.85rem;
-      font-weight: bold;
+    .page-banner .banner-nav a:hover {
       color: #C5972C;
-      text-decoration: none;
     }
-    .jump-to-sidebar a:hover {
-      text-decoration: underline;
-      color: #002868;
-    }
-    .statute-entry {
-      margin-bottom: 0.6rem;
-    }
-    .statute-entry .entry-name {
-      font-weight: bold;
-      color: #2c2c2c;
-    }
-    .statute-entry .entry-name a {
-      color: #2c2c2c;
-      text-decoration: none;
-    }
-    .statute-entry .entry-name a:hover {
-      text-decoration: underline;
-      color: #002868;
-    }
-    .statute-entry .entry-details {
-      padding-left: 2rem;
-      color: #555;
-      font-size: 0.92rem;
-    }
+    h5 { color: #002868; }
     footer {
-      border-top: 1px solid #ddd;
-      color: #777;
-      font-size: 0.85rem;
+      background: #001534;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
     }
-    a {
-      color: #002868;
+    footer a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #C5972C;
     }
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-md mb-4">
-  <div class="container">
-    <a class="navbar-brand" href="index.html">NE Statute Names</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navContent" aria-controls="navContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navContent">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">Search</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="browse.html">Browse</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="about.html">About</a>
-        </li>
-      </ul>
-    </div>
+<div class="page-banner">
+  <div class="banner-label">Nebraska Revised Statutes</div>
+  <h1>About This Project</h1>
+  <hr class="banner-rule">
+  <div class="banner-nav">
+    <a href="index.html">Home</a> &middot;
+    <a href="browse.html">Browse</a>
   </div>
-</nav>
-<main class="container mb-5">
+</div>
+
+<main class="container mb-5 mt-4">
 <div class="row justify-content-center">
   <div class="col-lg-8">
-    <h1 class="mb-4">About This Project</h1>
 
     <p>
       The <strong>Nebraska Statute Popular Name Index</strong> is a free,
@@ -182,7 +102,7 @@
       their commonly known names.
     </p>
 
-    <h5 class="mt-4">What are "popular names"?</h5>
+    <h5 class="mt-4">What are &ldquo;popular names&rdquo;?</h5>
     <p>
       Many Nebraska statutes include a section that gives the act a short,
       easy-to-remember name &mdash; for example, the <em>Uniform Commercial
@@ -222,9 +142,9 @@
   </div>
 </div>
 </main>
-<footer class="container text-center py-3">
-  <p>Nebraska Statute Popular Name Index &middot; Built from public data &middot;
-     <a href="about.html">About this project</a></p>
+<footer class="text-center py-3">
+  Nebraska Statute Popular Name Index &middot;
+  <a href="index.html">Home</a>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

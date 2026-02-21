@@ -198,6 +198,10 @@
       color: #555;
       font-size: 0.88rem;
     }
+    .cite {
+      font-variant: small-caps;
+      letter-spacing: 0.02em;
+    }
 
     /* Footer */
     footer {
@@ -300,8 +304,8 @@ function runSearch() {
       div.className = 'statute-entry';
       div.innerHTML = '<div class="entry-name"><a href="' + s.url + '" target="_blank" rel="noopener">' +
         s.popular_name.replace(/</g,'&lt;') + '</a></div>' +
-        '<div class="entry-details">&sect;&nbsp;' + s.start_section +
-        '&ndash;' + s.end_section + ' (' + s.statute_number + ')</div>';
+        '<div class="entry-details"><span class="cite">Neb. Rev. Stat.</span> &sect;&nbsp;' + s.start_section +
+        '&ndash;' + s.end_section + '</div>';
       area.appendChild(div);
     });
   } else {
