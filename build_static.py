@@ -23,6 +23,87 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CSV_FILE = os.path.join(SCRIPT_DIR, "nebraska_popular_names.csv")
 DOCS_DIR = os.path.join(SCRIPT_DIR, "docs")
 
+CHAPTER_TITLES = {
+    "1": "Accountants",
+    "2": "Agriculture",
+    "3": "Aeronautics",
+    "4": "Aliens",
+    "7": "Attorneys at Law",
+    "8": "Banks and Banking",
+    "9": "Bingo and Other Gambling",
+    "10": "Bonds",
+    "12": "Cemeteries",
+    "13": "Cities, Counties, and Other Political Subdivisions",
+    "14": "Cities of the Metropolitan Class",
+    "15": "Cities of the Primary Class",
+    "16": "Cities of the First Class",
+    "17": "Cities of the Second Class and Villages",
+    "18": "Cities and Villages; Laws Applicable to All",
+    "19": "Cities and Villages; Laws Applicable to More Than One and Less Than All Classes",
+    "20": "Civil Rights",
+    "21": "Corporations and Other Companies",
+    "23": "County Government and Officers",
+    "24": "Courts",
+    "25": "Courts; Civil Procedure",
+    "26": "Courts, Municipal; Civil Procedure",
+    "27": "Courts; Rules of Evidence",
+    "28": "Crimes and Punishments",
+    "29": "Criminal Procedure",
+    "30": "Decedents' Estates; Protection of Persons and Property",
+    "31": "Drainage",
+    "32": "Elections",
+    "33": "Fees and Salaries",
+    "35": "Fire Companies and Firefighters",
+    "36": "Fraud",
+    "37": "Game and Parks",
+    "38": "Health Occupations and Professions",
+    "39": "Highways and Bridges",
+    "42": "Households and Families",
+    "43": "Infants and Juveniles",
+    "44": "Insurance",
+    "45": "Interest, Loans, and Debt",
+    "46": "Irrigation and Regulation of Water",
+    "47": "Jails and Correctional Facilities",
+    "48": "Labor",
+    "49": "Law",
+    "50": "Legislature",
+    "51": "Libraries and Museums",
+    "52": "Liens",
+    "53": "Liquors",
+    "54": "Livestock",
+    "55": "Militia",
+    "57": "Minerals, Oil, and Gas",
+    "58": "Money and Financing",
+    "59": "Monopolies and Unlawful Combinations",
+    "60": "Motor Vehicles",
+    "61": "Natural Resources",
+    "64": "Notaries Public",
+    "66": "Oils, Fuels, and Energy",
+    "67": "Partnerships",
+    "68": "Public Assistance",
+    "69": "Personal Property",
+    "70": "Power Districts and Corporations",
+    "71": "Public Health and Welfare",
+    "72": "Public Lands, Buildings, and Funds",
+    "73": "Public Lettings and Contracts",
+    "74": "Railroads",
+    "75": "Public Service Commission",
+    "76": "Real Property",
+    "77": "Revenue and Taxation",
+    "79": "Schools",
+    "80": "Servicemembers and Veterans",
+    "81": "State Administrative Departments",
+    "82": "State Culture and History",
+    "83": "State Institutions",
+    "84": "State Officers",
+    "85": "State University, State Colleges, and Postsecondary Education",
+    "86": "Telecommunications and Technology",
+    "87": "Trade Practices",
+    "88": "Warehouses",
+    "89": "Weights and Measures",
+    "90": "Special Acts",
+}
+
 FAVICON_SVG = """\
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect x="8" y="38" width="48" height="22" rx="2" fill="#1a3a5c"/>
@@ -391,7 +472,7 @@ function runSearch() {{
       div.innerHTML = '<div class="entry-name"><a href="' + s.url + '">' +
         s.popular_name.replace(/</g,'&lt;') + '</a></div>' +
         '<div class="entry-details">&sect;&nbsp;' + s.start_section +
-        '&ndash;' + s.end_section + ' (' + s.statute_number + ')</div>';
+        ' to ' + s.end_section + ' (' + s.statute_number + ')</div>';
       area.appendChild(div);
     }});
   }} else {{
@@ -441,22 +522,24 @@ def build_browse(rows):
         alpha_entries.append(
             f'<div class="statute-entry">'
             f'<div class="entry-name"><a href="{esc(r["url"])}">{esc(r["popular_name"])}</a></div>'
-            f'<div class="entry-details">&sect;&nbsp;{esc(r["start_section"])}&ndash;'
+            f'<div class="entry-details">&sect;&nbsp;{esc(r["start_section"])} to '
             f'{esc(r["end_section"])} ({esc(r["statute_number"])})</div></div>'
         )
 
     # Build chapter entries
     chapter_entries = []
     for chap in sorted_chapters:
+        chap_title = CHAPTER_TITLES.get(chap, "")
+        chap_label = f"Chapter {esc(chap)}: {esc(chap_title)}" if chap_title else f"Chapter {esc(chap)}"
         chapter_entries.append(
             f'<h3 id="chapter-{chap}" class="mt-4 mb-2 border-bottom pb-1" '
-            f'style="color: #5a1a1a;">Chapter {esc(chap)}</h3>'
+            f'style="color: #5a1a1a;">{chap_label}</h3>'
         )
         for r in chapters[chap]:
             chapter_entries.append(
                 f'<div class="statute-entry">'
                 f'<div class="entry-name"><a href="{esc(r["url"])}">{esc(r["popular_name"])}</a></div>'
-                f'<div class="entry-details">&sect;&nbsp;{esc(r["start_section"])}&ndash;'
+                f'<div class="entry-details">&sect;&nbsp;{esc(r["start_section"])} to '
                 f'{esc(r["end_section"])} ({esc(r["statute_number"])})</div></div>'
             )
 

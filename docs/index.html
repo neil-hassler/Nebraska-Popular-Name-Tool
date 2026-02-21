@@ -305,7 +305,7 @@ function runSearch() {
       div.innerHTML = '<div class="entry-name"><a href="' + s.url + '" target="_blank" rel="noopener">' +
         s.popular_name.replace(/</g,'&lt;') + '</a></div>' +
         '<div class="entry-details"><span class="cite">Neb. Rev. Stat.</span> &sect;&nbsp;' + s.start_section +
-        '&ndash;' + s.end_section + '</div>';
+        ' to ' + s.end_section + '</div>';
       area.appendChild(div);
     });
   } else {
