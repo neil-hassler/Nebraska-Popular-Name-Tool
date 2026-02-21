@@ -1,8 +1,5 @@
-# Cloned XML repository (large, downloaded at runtime)
+# Cloned XML repository (large, downloaded at runtime by scraper)
 LegalDocs/
-
-# Output files (kept in repo for easy access)
-# *.csv
 
 # Python
 __pycache__/
@@ -11,5 +8,5 @@ __pycache__/
 .venv/
 venv/
 
-# SQLite database (rebuilt from CSV on first run)
+# SQLite database (not needed for static site)
 *.db

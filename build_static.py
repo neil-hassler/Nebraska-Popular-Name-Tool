@@ -19,8 +19,25 @@ import json
 import os
 import shutil
 
-CSV_FILE = os.path.join(os.path.dirname(__file__), "nebraska_popular_names.csv")
-DOCS_DIR = os.path.join(os.path.dirname(__file__), "docs")
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(SCRIPT_DIR, "nebraska_popular_names.csv")
+DOCS_DIR = os.path.join(SCRIPT_DIR, "docs")
+
+FAVICON_SVG = """\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="8" y="38" width="48" height="22" rx="2" fill="#1a3a5c"/>
+  <rect x="14" y="30" width="36" height="10" rx="1" fill="#1a3a5c"/>
+  <rect x="24" y="14" width="16" height="18" rx="1" fill="#1a3a5c"/>
+  <rect x="29" y="6" width="6" height="10" fill="#1a3a5c"/>
+  <circle cx="32" cy="5" r="3" fill="#c5a44e"/>
+  <rect x="27" y="18" width="3" height="5" rx="0.5" fill="#fafaf8"/>
+  <rect x="34" y="18" width="3" height="5" rx="0.5" fill="#fafaf8"/>
+  <rect x="17" y="33" width="3" height="4" rx="0.5" fill="#fafaf8"/>
+  <rect x="24" y="33" width="3" height="4" rx="0.5" fill="#fafaf8"/>
+  <rect x="37" y="33" width="3" height="4" rx="0.5" fill="#fafaf8"/>
+  <rect x="44" y="33" width="3" height="4" rx="0.5" fill="#fafaf8"/>
+</svg>
+"""
 
 
 def load_data():
@@ -287,18 +304,18 @@ def build_index(rows):
         for label, q in popular_searches
     )
 
-    page = HEAD.format(title="Search &mdash; Nebraska Statute Popular Names")
+    page = HEAD.format(title="Nebraska Statute Popular Name Tool")
     page += navbar("search")
     page += f"""\
 <main class="container mb-5">
 <div class="hero text-center rounded mb-4">
-  <h1 class="mb-2">Nebraska Statute Popular Names</h1>
-  <p>Search the popular-name index of the Nebraska Revised Statutes</p>
+  <h1 class="mb-2">Nebraska Popular Name Tool</h1>
+  <p>Find Nebraska laws by their commonly known names</p>
 
   <div class="search-box mt-4 mb-3">
     <div class="input-group input-group-lg">
       <input type="text" class="form-control" id="searchInput"
-             placeholder="Search by popular name or statute number&hellip;"
+             placeholder="e.g. Uniform Commercial Code, Consumer Protection&hellip;"
              aria-label="Search statutes"
              autofocus>
       <button class="btn btn-light" type="button" id="searchBtn"
@@ -317,9 +334,15 @@ def build_index(rows):
   </div>
 </div>
 
+<p class="text-center text-muted mb-4" style="max-width: 700px; margin: 0 auto;">
+  Search or browse <strong>{total}</strong> Nebraska Revised Statutes by popular name.
+  Each entry links directly to the full text on the
+  <a href="https://nebraskalegislature.gov" target="_blank" rel="noopener">official Nebraska Legislature website</a>.
+</p>
+
 <div id="resultsArea">
   <div class="text-center mt-3" id="defaultContent">
-    <p class="text-muted mb-2">Popular searches:</p>
+    <p class="text-muted mb-2">Try a search:</p>
     <div class="popular-tags">
       {tags_html}
     </div>
@@ -569,10 +592,9 @@ def main():
         shutil.rmtree(DOCS_DIR)
     os.makedirs(DOCS_DIR)
 
-    # Copy favicon
-    src_favicon = os.path.join(os.path.dirname(__file__), "static", "favicon.svg")
-    if os.path.exists(src_favicon):
-        shutil.copy2(src_favicon, os.path.join(DOCS_DIR, "favicon.svg"))
+    # Write favicon
+    with open(os.path.join(DOCS_DIR, "favicon.svg"), "w") as f:
+        f.write(FAVICON_SVG)
 
     # Generate pages
     for filename, content in [
