@@ -10,3 +10,12 @@ venv/
 
 # SQLite database (not needed for static site)
 *.db
+
+# Secrets and credentials
+.env
+.env.*
+*.key
+*.pem
+*.crt
+credentials.json
+secrets.json
