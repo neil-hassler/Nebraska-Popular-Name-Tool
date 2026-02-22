@@ -302,10 +302,27 @@ function runSearch() {
     results.forEach(function(s) {
       var div = document.createElement('div');
       div.className = 'statute-entry';
-      div.innerHTML = '<div class="entry-name"><a href="' + s.url + '" target="_blank" rel="noopener">' +
-        s.popular_name.replace(/</g,'&lt;') + '</a></div>' +
-        '<div class="entry-details"><span class="cite">Neb. Rev. Stat.</span> &sect;&nbsp;' + s.start_section +
-        ' to ' + s.end_section + '</div>';
+
+      var nameDiv = document.createElement('div');
+      nameDiv.className = 'entry-name';
+      var link = document.createElement('a');
+      link.href = s.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = s.popular_name;
+      nameDiv.appendChild(link);
+
+      var detailDiv = document.createElement('div');
+      detailDiv.className = 'entry-details';
+      var cite = document.createElement('span');
+      cite.className = 'cite';
+      cite.textContent = 'Neb. Rev. Stat.';
+      detailDiv.appendChild(cite);
+      detailDiv.appendChild(document.createTextNode(' \u00A7\u00A0' + s.start_section +
+        ' to ' + s.end_section));
+
+      div.appendChild(nameDiv);
+      div.appendChild(detailDiv);
       area.appendChild(div);
     });
   } else {

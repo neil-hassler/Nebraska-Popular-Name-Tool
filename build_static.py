@@ -367,8 +367,7 @@ def build_index(rows):
             }
             for r in rows
         ],
-        ensure_ascii=False,
-    )
+    ).replace("</", r"<\/")
 
     popular_searches = [
         ("Uniform Commercial Code", "Uniform+Commercial+Code"),
@@ -409,7 +408,7 @@ def build_index(rows):
   <div class="quick-jump mt-3">
     <select class="form-select" id="quickJump"
             aria-label="Jump to a statute by popular name"
-            onchange="if(this.value) window.location.href=this.value">
+            onchange="if(this.value &amp;&amp; this.value.match(/^https?:\\/\\//)) window.location.href=this.value">
       {options_html}
     </select>
   </div>
@@ -469,10 +468,21 @@ function runSearch() {{
     results.forEach(function(s) {{
       var div = document.createElement('div');
       div.className = 'statute-entry search-result';
-      div.innerHTML = '<div class="entry-name"><a href="' + s.url + '">' +
-        s.popular_name.replace(/</g,'&lt;') + '</a></div>' +
-        '<div class="entry-details">&sect;&nbsp;' + s.start_section +
-        ' to ' + s.end_section + ' (' + s.statute_number + ')</div>';
+
+      var nameDiv = document.createElement('div');
+      nameDiv.className = 'entry-name';
+      var link = document.createElement('a');
+      link.href = s.url;
+      link.textContent = s.popular_name;
+      nameDiv.appendChild(link);
+
+      var detailDiv = document.createElement('div');
+      detailDiv.className = 'entry-details';
+      detailDiv.textContent = '\u00A7\u00A0' + s.start_section +
+        ' to ' + s.end_section + ' (' + s.statute_number + ')';
+
+      div.appendChild(nameDiv);
+      div.appendChild(detailDiv);
       area.appendChild(div);
     }});
   }} else {{
