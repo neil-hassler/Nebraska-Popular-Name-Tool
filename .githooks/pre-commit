@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook: block commits containing likely secrets or credentials.
+# Scans only staged (added) content, not the full file.
+#
+
+set -euo pipefail
+
+# Patterns that indicate secrets (case-insensitive where noted)
+PATTERNS=(
+  'AKIA[0-9A-Z]{16}'                         # AWS Access Key ID
+  '["\x27]sk-[a-zA-Z0-9]{20,}'               # OpenAI / Stripe secret key
+  'ghp_[a-zA-Z0-9]{36}'                      # GitHub personal access token
+  'gho_[a-zA-Z0-9]{36}'                      # GitHub OAuth token
+  'github_pat_[a-zA-Z0-9_]{22,}'             # GitHub fine-grained PAT
+  'glpat-[a-zA-Z0-9\-]{20,}'                 # GitLab PAT
+  'xox[bpas]-[a-zA-Z0-9\-]+'                 # Slack token
+  '-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----'  # Private keys
+  'password\s*[:=]\s*["\x27][^\s"'\'']{8,}'   # password = "..."
+  'secret\s*[:=]\s*["\x27][^\s"'\'']{8,}'     # secret = "..."
+  'api[_-]?key\s*[:=]\s*["\x27][^\s"'\'']{8,}' # api_key = "..."
+  'token\s*[:=]\s*["\x27][^\s"'\'']{8,}'      # token = "..."
+)
+
+# Files to skip (binary, lock files, this hook itself)
+EXCLUDE='\.png$|\.jpg$|\.jpeg$|\.gif$|\.ico$|\.woff|\.ttf$|\.lock$|package-lock\.json$'
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -Ev "$EXCLUDE" || true)
+
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+FOUND=0
+
+for pattern in "${PATTERNS[@]}"; do
+  # Scan only the staged diff content
+  MATCHES=$(git diff --cached -U0 -- $STAGED_FILES | grep -iEn "$pattern" 2>/dev/null || true)
+  if [ -n "$MATCHES" ]; then
+    if [ "$FOUND" -eq 0 ]; then
+      echo ""
+      echo "ERROR: Possible secret or credential detected in staged changes!"
+      echo "=============================================================="
+    fi
+    FOUND=1
+    echo ""
+    echo "Pattern: $pattern"
+    echo "$MATCHES"
+  fi
+done
+
+# Also check for .env files being staged
+ENV_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^\.env|/\.env' || true)
+if [ -n "$ENV_FILES" ]; then
+  if [ "$FOUND" -eq 0 ]; then
+    echo ""
+    echo "ERROR: Possible secret or credential detected in staged changes!"
+    echo "=============================================================="
+  fi
+  FOUND=1
+  echo ""
+  echo "Blocked .env file(s):"
+  echo "$ENV_FILES"
+fi
+
+if [ "$FOUND" -ne 0 ]; then
+  echo ""
+  echo "Commit blocked. Remove the secret before committing."
+  echo "To bypass this check (NOT recommended): git commit --no-verify"
+  echo ""
+  exit 1
+fi
+
+exit 0

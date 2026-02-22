@@ -32,6 +32,14 @@ python build_static.py
 
 The updated HTML files will be in `docs/`.
 
+## Development Setup
+
+To enable the pre-commit secret scanner (blocks accidental commits of API keys, passwords, etc.):
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## Project Structure
 
 ```
